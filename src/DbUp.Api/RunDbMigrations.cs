@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
+﻿using DbUp.Infrastructure.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 
 namespace DbUp.Api
 {
@@ -14,10 +9,12 @@ namespace DbUp.Api
     {
         internal static void Run(IHost host)
         {
-            var options = GetFluentMigratorOptions(host);
+            var options = GetDbUpOptions(host);
+
+            PersistenceDbMigrations.EnsureDdb(options.DbConnectionString);
         }
 
-        private static DbUpOptions GetFluentMigratorOptions(IHost host)
+        private static DbUpOptions GetDbUpOptions(IHost host)
         {
             var options = new DbUpOptions();
             using (var scope = host.Services.CreateScope())
@@ -25,9 +22,6 @@ namespace DbUp.Api
                 var services = scope.ServiceProvider;
                 var config = services.GetRequiredService<IConfiguration>();
                 options.DbConnectionString = config.GetConnectionString("Database");
-                options.MasterDb = config.GetConnectionString("Master");
-                //options.MainDbName = config.GetSection(FluentMigratorSettings.MainDbName).Value;
-                //options.TagsRaw = config.GetSection(FluentMigratorSettings.Tags).Value;
             }
             return options;
         }
