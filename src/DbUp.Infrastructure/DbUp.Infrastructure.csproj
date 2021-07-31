@@ -6,11 +6,15 @@
 
   <ItemGroup>
     <None Remove="Persistence\Scripts\Scripts0001_CreateLocationsTable.sql" />
+    <None Remove="Persistence\Scripts\Scripts0003_CreateTableUsingVariable.sql" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Persistence\Scripts\Scripts0001_CreateLocationsTable.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Persistence\Scripts\Scripts0003_CreateTableUsingVariable.sql">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
   </ItemGroup>
 

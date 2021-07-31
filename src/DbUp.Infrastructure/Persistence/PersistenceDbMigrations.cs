@@ -21,6 +21,7 @@ namespace DbUp.Infrastructure.Persistence
                     .LogToConsole()
                     .LogScriptOutput()
                     .JournalToSqlTable("dbo", "VersionInfo")
+                    .WithVariable("TableName", "Moviez")
                     .Build();
 
             var result = upgrader.PerformUpgrade();
