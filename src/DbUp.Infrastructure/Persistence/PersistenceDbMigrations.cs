@@ -1,7 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Reflection;
-using DbUp.ScriptProviders;
 
 namespace DbUp.Infrastructure.Persistence
 {
@@ -19,11 +16,11 @@ namespace DbUp.Infrastructure.Persistence
             var upgrader =
                 DeployChanges.To
                     .SqlDatabase(connectionString)
-                    .WithScriptsEmbeddedInAssembly(typeof(ConnectionStringSettings).Assembly)
+                    .WithScriptsAndCodeEmbeddedInAssembly(typeof(ConnectionStringSettings).Assembly)
                     .WithTransactionPerScript()
                     .LogToConsole()
                     .LogScriptOutput()
-                    .JournalToSqlTable("dbo", "MigrationsJournal")
+                    .JournalToSqlTable("dbo", "VersionInfo")
                     .Build();
 
             var result = upgrader.PerformUpgrade();
