@@ -12,6 +12,8 @@ namespace DbUp.Api
             var options = GetDbUpOptions(host);
 
             PersistenceDbMigrations.EnsureDdb(options.DbConnectionString);
+
+            var result = PersistenceDbMigrations.MigrateAllTheThings(options.DbConnectionString);
         }
 
         private static DbUpOptions GetDbUpOptions(IHost host)
