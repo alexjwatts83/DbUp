@@ -52,6 +52,8 @@ namespace DbUp.Infrastructure.Persistence
                 return ReturnError(result.Error.ToString());
             }
 
+            ShowSuccess();
+
             return 0;
         }
 
