@@ -1,4 +1,5 @@
 ﻿using System;
+using DbUp.Helpers;
 
 namespace DbUp.Infrastructure.Persistence
 {
@@ -16,7 +17,9 @@ namespace DbUp.Infrastructure.Persistence
             var upgrader =
                 DeployChanges.To
                     .SqlDatabase(connectionString)
-                    .WithScriptsAndCodeEmbeddedInAssembly(typeof(ConnectionStringSettings).Assembly)
+                    .WithScriptsAndCodeEmbeddedInAssembly(
+                        typeof(ConnectionStringSettings).Assembly,
+                        options => options.Contains("Scripts"))
                     .WithTransactionPerScript()
                     .LogToConsole()
                     .LogScriptOutput()
@@ -30,6 +33,19 @@ namespace DbUp.Infrastructure.Persistence
             {
                 return ReturnError(result.Error.ToString());
             }
+
+            var alwaysRunUpgrader =
+                DeployChanges.To
+                    .SqlDatabase(connectionString)
+                    .WithScriptsAndCodeEmbeddedInAssembly(
+                        typeof(ConnectionStringSettings).Assembly,
+                        options => options.Contains("Always"))
+                    .JournalTo(new NullJournal())
+                    .LogScriptOutput()
+                    .LogToConsole()
+                    .Build();
+
+            result = alwaysRunUpgrader.PerformUpgrade();
 
             ShowSuccess();
             
