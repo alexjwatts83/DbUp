@@ -47,8 +47,11 @@ namespace DbUp.Infrastructure.Persistence
 
             result = alwaysRunUpgrader.PerformUpgrade();
 
-            ShowSuccess();
-            
+            if (!result.Successful)
+            {
+                return ReturnError(result.Error.ToString());
+            }
+
             return 0;
         }
 
